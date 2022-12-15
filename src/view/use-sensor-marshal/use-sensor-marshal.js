@@ -149,6 +149,7 @@ type TryStartArgs = {|
   draggableId: DraggableId,
   forceSensorStop: ?() => void,
   sourceEvent: ?Event,
+  win: WindowProxy,
 |};
 
 function tryStart({
@@ -159,6 +160,7 @@ function tryStart({
   draggableId,
   forceSensorStop,
   sourceEvent,
+  win,
 }: TryStartArgs): ?PreDragActions {
   const shouldStart: boolean = canStart({
     lockAPI,
@@ -172,7 +174,7 @@ function tryStart({
   }
 
   const entry: DraggableEntry = registry.draggable.getById(draggableId);
-  const el: ?HTMLElement = findDraggable(contextId, entry.descriptor.id);
+  const el: ?HTMLElement = findDraggable(contextId, entry.descriptor.id, win);
 
   if (!el) {
     warning(`Unable to find draggable element with id: ${draggableId}`);
@@ -239,7 +241,7 @@ function tryStart({
 
       // block next click if requested
       if (options.shouldBlockNextClick) {
-        const unbind = bindEvents(window, [
+        const unbind = bindEvents(win, [
           {
             eventName: 'click',
             fn: preventDefault,
@@ -355,6 +357,7 @@ type SensorMarshalArgs = {|
   store: Store,
   customSensors: ?(Sensor[]),
   enableDefaultSensors: boolean,
+  win: WindowProxy,
 |};
 
 // default sensors are now exported to library consumers
@@ -370,6 +373,7 @@ export default function useSensorMarshal({
   registry,
   customSensors,
   enableDefaultSensors,
+  win,
 }: SensorMarshalArgs) {
   const useSensors: Sensor[] = [
     ...(enableDefaultSensors ? defaultSensors : []),
@@ -434,8 +438,9 @@ export default function useSensorMarshal({
         forceSensorStop: forceStop,
         sourceEvent:
           options && options.sourceEvent ? options.sourceEvent : null,
+        win,
       }),
-    [contextId, lockAPI, registry, store],
+    [contextId, lockAPI, registry, store, win],
   );
 
   const findClosestDraggableId = useCallback(
@@ -476,6 +481,7 @@ export default function useSensorMarshal({
       findOptionsForDraggable,
       tryReleaseLock,
       isLockClaimed,
+      window: win,
     }),
     [
       canGetLock,
@@ -484,6 +490,7 @@ export default function useSensorMarshal({
       findOptionsForDraggable,
       tryReleaseLock,
       isLockClaimed,
+      win,
     ],
   );
 

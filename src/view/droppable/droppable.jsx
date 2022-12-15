@@ -26,7 +26,7 @@ import { PrivateDraggable } from '../draggable/draggable-api';
 export default function Droppable(props: Props) {
   const appContext: ?AppContextValue = useContext<?AppContextValue>(AppContext);
   invariant(appContext, 'Could not find app context');
-  const { contextId, isMovementAllowed } = appContext;
+  const { contextId, isMovementAllowed, window: win } = appContext;
   const droppableRef = useRef<?HTMLElement>(null);
   const placeholderRef = useRef<?HTMLElement>(null);
 
@@ -49,6 +49,8 @@ export default function Droppable(props: Props) {
     // clone (ownProps)
     getContainerForClone,
   } = props;
+
+  const doc: Document = win.document;
 
   const getDroppableRef = useCallback(
     (): ?HTMLElement => droppableRef.current,
@@ -74,9 +76,9 @@ export default function Droppable(props: Props) {
   const onPlaceholderTransitionEnd = useCallback(() => {
     // A placeholder change can impact the window's max scroll
     if (isMovementAllowed()) {
-      updateViewportMaxScroll({ maxScroll: getMaxWindowScroll() });
+      updateViewportMaxScroll({ maxScroll: getMaxWindowScroll(doc) });
     }
-  }, [isMovementAllowed, updateViewportMaxScroll]);
+  }, [isMovementAllowed, updateViewportMaxScroll, doc]);
 
   useDroppablePublisher({
     droppableId,
@@ -155,7 +157,7 @@ export default function Droppable(props: Props) {
       </PrivateDraggable>
     );
 
-    return ReactDOM.createPortal(node, getContainerForClone());
+    return ReactDOM.createPortal(node, getContainerForClone(win));
   }
 
   return (

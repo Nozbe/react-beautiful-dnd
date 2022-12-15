@@ -16,11 +16,16 @@ type EntryMap = {
   [id: DraggableId]: Entry,
 };
 
-export default function useFocusMarshal(contextId: ContextId): FocusMarshal {
+export default function useFocusMarshal(
+  contextId: ContextId,
+  win: WindowProxy,
+): FocusMarshal {
   const entriesRef = useRef<EntryMap>({});
   const recordRef = useRef<?DraggableId>(null);
   const restoreFocusFrameRef = useRef<?AnimationFrameID>(null);
   const isMountedRef = useRef<boolean>(false);
+
+  const doc: Document = win.document;
 
   const register = useCallback(function register(
     id: DraggableId,
@@ -42,13 +47,17 @@ export default function useFocusMarshal(contextId: ContextId): FocusMarshal {
 
   const tryGiveFocus = useCallback(
     function tryGiveFocus(tryGiveFocusTo: DraggableId) {
-      const handle: ?HTMLElement = findDragHandle(contextId, tryGiveFocusTo);
+      const handle: ?HTMLElement = findDragHandle(
+        contextId,
+        tryGiveFocusTo,
+        win,
+      );
 
-      if (handle && handle !== document.activeElement) {
+      if (handle && handle !== doc.activeElement) {
         handle.focus();
       }
     },
-    [contextId],
+    [contextId, doc, win],
   );
 
   const tryShiftRecord = useCallback(function tryShiftRecord(
@@ -85,24 +94,27 @@ export default function useFocusMarshal(contextId: ContextId): FocusMarshal {
     [tryGiveFocus],
   );
 
-  const tryRecordFocus = useCallback(function tryRecordFocus(id: DraggableId) {
-    // clear any existing record
-    recordRef.current = null;
+  const tryRecordFocus = useCallback(
+    function tryRecordFocus(id: DraggableId) {
+      // clear any existing record
+      recordRef.current = null;
 
-    const focused: ?Element = document.activeElement;
+      const focused: ?Element = doc.activeElement;
 
-    // no item focused so it cannot be our item
-    if (!focused) {
-      return;
-    }
+      // no item focused so it cannot be our item
+      if (!focused) {
+        return;
+      }
 
-    // focused element is not a drag handle or does not have the right id
-    if (focused.getAttribute(dragHandleAttr.draggableId) !== id) {
-      return;
-    }
+      // focused element is not a drag handle or does not have the right id
+      if (focused.getAttribute(dragHandleAttr.draggableId) !== id) {
+        return;
+      }
 
-    recordRef.current = id;
-  }, []);
+      recordRef.current = id;
+    },
+    [doc],
+  );
 
   useLayoutEffect(() => {
     isMountedRef.current = true;

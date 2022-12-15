@@ -23,16 +23,18 @@ type Args = {|
   critical: Critical,
   scrollOptions: ScrollOptions,
   registry: Registry,
+  win: WindowProxy,
 |};
 
 export default ({
   critical,
   scrollOptions,
   registry,
+  win,
 }: Args): StartPublishingResult => {
   const timingKey: string = 'Initial collection from DOM';
   timings.start(timingKey);
-  const viewport: Viewport = getViewport();
+  const viewport: Viewport = getViewport(win);
   const windowScroll: Position = viewport.scroll.current;
 
   const home: DroppableDescriptor = critical.droppable;

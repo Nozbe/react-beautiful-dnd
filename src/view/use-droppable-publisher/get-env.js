@@ -13,7 +13,8 @@ const getIsFixed = (el: ?Element): boolean => {
   if (!el) {
     return false;
   }
-  const style: CSSStyleDeclaration = window.getComputedStyle(el);
+  const win = el.ownerDocument.defaultView;
+  const style: CSSStyleDeclaration = win.getComputedStyle(el);
   if (style.position === 'fixed') {
     return true;
   }

@@ -209,6 +209,7 @@ function getCaptureBindings({
 export default function useMouseSensor(api: SensorAPI) {
   const phaseRef = useRef<Phase>(idle);
   const unbindEventsRef = useRef<() => void>(noop);
+  const win = api.window || window;
 
   const startCaptureBinding: EventBinding = useMemo(
     () => ({
@@ -308,12 +309,12 @@ export default function useMouseSensor(api: SensorAPI) {
       };
 
       unbindEventsRef.current = bindEvents(
-        window,
+        win,
         [preventForcePressBinding, startCaptureBinding],
         options,
       );
     },
-    [preventForcePressBinding, startCaptureBinding],
+    [preventForcePressBinding, startCaptureBinding, win],
   );
 
   const stop = useCallback(() => {
@@ -351,9 +352,9 @@ export default function useMouseSensor(api: SensorAPI) {
         },
       });
 
-      unbindEventsRef.current = bindEvents(window, bindings, options);
+      unbindEventsRef.current = bindEvents(win, bindings, options);
     },
-    [cancel, stop],
+    [cancel, stop, win],
   );
 
   const startPendingDrag = useCallback(

@@ -6,6 +6,7 @@ export default function isSvgElement(el: Object): boolean %checks {
   // Doing a double lookup rather than storing the window
   // as a %checks function can only be a 'simple predicate'
   return (
+    el &&
     Boolean(getWindowFromEl(el).SVGElement) &&
     el instanceof getWindowFromEl(el).SVGElement
   );

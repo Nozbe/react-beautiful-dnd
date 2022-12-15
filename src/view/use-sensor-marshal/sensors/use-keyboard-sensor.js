@@ -140,6 +140,7 @@ function getDraggingBindings(
 
 export default function useKeyboardSensor(api: SensorAPI) {
   const unbindEventsRef = useRef<() => void>(noop);
+  const win = api.window || window;
 
   const startCaptureBinding: EventBinding = useMemo(
     () => ({
@@ -202,7 +203,7 @@ export default function useKeyboardSensor(api: SensorAPI) {
 
         // bind dragging listeners
         unbindEventsRef.current = bindEvents(
-          window,
+          win,
           getDraggingBindings(actions, stop),
           { capture: true, passive: false },
         );
@@ -220,13 +221,9 @@ export default function useKeyboardSensor(api: SensorAPI) {
         capture: true,
       };
 
-      unbindEventsRef.current = bindEvents(
-        window,
-        [startCaptureBinding],
-        options,
-      );
+      unbindEventsRef.current = bindEvents(win, [startCaptureBinding], options);
     },
-    [startCaptureBinding],
+    [startCaptureBinding, win],
   );
 
   useLayoutEffect(

@@ -10,11 +10,12 @@ const shouldEnd = (action: Action): boolean =>
   action.type === 'DROP_ANIMATE' ||
   action.type === 'FLUSH';
 
-export default (store: MiddlewareStore) => {
+export default (win: WindowProxy) => (store: MiddlewareStore) => {
   const listener = getScrollListener({
     onWindowScroll: (newScroll: Position) => {
       store.dispatch(moveByWindowScroll({ newScroll }));
     },
+    win,
   });
 
   return (next: Dispatch) => (action: Action): any => {

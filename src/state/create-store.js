@@ -39,6 +39,7 @@ type Args = {|
   getResponders: () => Responders,
   announce: Announce,
   autoScroller: AutoScroller,
+  win: WindowProxy,
 |};
 
 export default ({
@@ -48,6 +49,7 @@ export default ({
   getResponders,
   announce,
   autoScroller,
+  win,
 }: Args): Store =>
   createStore(
     reducer,
@@ -85,10 +87,10 @@ export default ({
         drop,
         // When a drop animation finishes - fire a drop complete
         dropAnimationFinish,
-        dropAnimationFlushOnScroll,
+        dropAnimationFlushOnScroll(win),
         pendingDrop,
         autoScroll(autoScroller),
-        scrollListener,
+        scrollListener(win),
         focus(focusMarshal),
         // Fire responders for consumers (after update to store)
         responders(getResponders, announce),

@@ -65,7 +65,7 @@ export type Props = {|
   dragHandleUsageInstructions: string,
 
   // window
-  window: WindowProxy,
+  win: WindowProxy,
 |};
 
 const createResponders = (props: Props): Responders => ({
@@ -92,11 +92,11 @@ export default function App(props: Props) {
     sensors,
     nonce,
     dragHandleUsageInstructions,
-    window: win,
+    win,
   } = props;
   const lazyStoreRef: LazyStoreRef = useRef<?Store>(null);
 
-  useStartupValidation();
+  useStartupValidation(win);
 
   // lazy collection of responders using a ref - update on ever render
   const lastPropsRef = usePrevious<Props>(props);
@@ -105,13 +105,14 @@ export default function App(props: Props) {
     return createResponders(lastPropsRef.current);
   }, [lastPropsRef]);
 
-  const announce: Announce = useAnnouncer(contextId);
+  const announce: Announce = useAnnouncer(contextId, win);
 
   const dragHandleUsageInstructionsId: ElementId = useHiddenTextElement({
     contextId,
     text: dragHandleUsageInstructions,
+    win,
   });
-  const styleMarshal: StyleMarshal = useStyleMarshal(contextId, nonce);
+  const styleMarshal: StyleMarshal = useStyleMarshal(contextId, nonce, win);
 
   const lazyDispatch: (Action) => void = useCallback((action: Action): void => {
     getStore(lazyStoreRef).dispatch(action);
@@ -136,13 +137,13 @@ export default function App(props: Props) {
   const registry: Registry = useRegistry();
 
   const dimensionMarshal: DimensionMarshal = useMemo<DimensionMarshal>(() => {
-    return createDimensionMarshal(registry, marshalCallbacks);
-  }, [registry, marshalCallbacks]);
+    return createDimensionMarshal(registry, marshalCallbacks, win);
+  }, [registry, marshalCallbacks, win]);
 
   const autoScroller: AutoScroller = useMemo<AutoScroller>(
     () =>
       createAutoScroller({
-        scrollWindow,
+        scrollWindow: scrollWindow(win),
         scrollDroppable: dimensionMarshal.scrollDroppable,
         ...bindActionCreators(
           {
@@ -152,10 +153,10 @@ export default function App(props: Props) {
           lazyDispatch,
         ),
       }),
-    [dimensionMarshal.scrollDroppable, lazyDispatch],
+    [dimensionMarshal.scrollDroppable, lazyDispatch, win],
   );
 
-  const focusMarshal: FocusMarshal = useFocusMarshal(contextId);
+  const focusMarshal: FocusMarshal = useFocusMarshal(contextId, win);
 
   const store: Store = useMemo<Store>(
     () =>
@@ -166,6 +167,7 @@ export default function App(props: Props) {
         focusMarshal,
         getResponders,
         styleMarshal,
+        win,
       }),
     [
       announce,
@@ -174,6 +176,7 @@ export default function App(props: Props) {
       focusMarshal,
       getResponders,
       styleMarshal,
+      win,
     ],
   );
 
@@ -252,6 +255,7 @@ export default function App(props: Props) {
     customSensors: sensors,
     // default to 'true' unless 'false' is explicitly passed
     enableDefaultSensors: props.enableDefaultSensors !== false,
+    win,
   });
 
   // Clean store when unmounting

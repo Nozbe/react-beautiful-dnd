@@ -1,3 +1,8 @@
 // @flow
-export default (el: ?Element): typeof window =>
-  el && el.ownerDocument ? el.ownerDocument.defaultView : window;
+export default (el: Element): typeof window => {
+  if (el.ownerDocument) {
+    return el.ownerDocument.defaultView || window;
+  }
+  // `ownerDocument` only returns null if called on Document
+  return ((el: any): Document).defaultView || window;
+};

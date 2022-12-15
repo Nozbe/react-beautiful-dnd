@@ -5,7 +5,7 @@ import type { MiddlewareStore, Action, Dispatch } from '../../store-types';
 import type { EventBinding } from '../../../view/event-bindings/event-types';
 import bindEvents from '../../../view/event-bindings/bind-events';
 
-export default (store: MiddlewareStore) => {
+export default (win: WindowProxy) => (store: MiddlewareStore) => {
   let unbind: ?() => void = null;
   let frameId: ?AnimationFrameID = null;
 
@@ -57,7 +57,7 @@ export default (store: MiddlewareStore) => {
     // It leads to funny drop positions :(
     frameId = requestAnimationFrame(() => {
       frameId = null;
-      unbind = bindEvents(window, [binding]);
+      unbind = bindEvents(win, [binding]);
     });
   };
 };

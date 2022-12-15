@@ -1,8 +1,8 @@
 // @flow
 import { invariant } from '../invariant';
 
-export default (): HTMLElement => {
-  const doc: ?HTMLElement = document.documentElement;
-  invariant(doc, 'Cannot find document.documentElement');
-  return doc;
+export default (doc: Document): HTMLElement => {
+  const html: ?HTMLElement = doc.documentElement;
+  invariant(html, 'Cannot find document.documentElement');
+  return html;
 };

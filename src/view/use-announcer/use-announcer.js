@@ -9,13 +9,18 @@ import visuallyHidden from '../visually-hidden-style';
 export const getId = (contextId: ContextId): string =>
   `rbd-announcement-${contextId}`;
 
-export default function useAnnouncer(contextId: ContextId): Announce {
+export default function useAnnouncer(
+  contextId: ContextId,
+  win: WindowProxy,
+): Announce {
   const id: string = useMemo(() => getId(contextId), [contextId]);
   const ref = useRef<?HTMLElement>(null);
 
+  const doc: Document = win.document;
+
   useEffect(
     function setup() {
-      const el: HTMLElement = document.createElement('div');
+      const el: HTMLElement = doc.createElement('div');
       // storing reference for usage in announce
       ref.current = el;
 
@@ -33,7 +38,7 @@ export default function useAnnouncer(contextId: ContextId): Announce {
       Object.assign(el.style, visuallyHidden);
 
       // Add to body
-      getBodyElement().appendChild(el);
+      getBodyElement(doc).appendChild(el);
 
       return function cleanup() {
         // Not clearing the ref as it might be used by announce before the timeout expires
@@ -42,7 +47,7 @@ export default function useAnnouncer(contextId: ContextId): Announce {
         // during a mount be published
         setTimeout(function remove() {
           // checking if element exists as the body might have been changed by things like 'turbolinks'
-          const body: HTMLBodyElement = getBodyElement();
+          const body: HTMLBodyElement = getBodyElement(doc);
           if (body.contains(el)) {
             body.removeChild(el);
           }
@@ -54,7 +59,7 @@ export default function useAnnouncer(contextId: ContextId): Announce {
         });
       };
     },
-    [id],
+    [id, doc],
   );
 
   const announce: Announce = useCallback((message: string): void => {

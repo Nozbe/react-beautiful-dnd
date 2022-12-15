@@ -39,7 +39,7 @@ export default function DragDropContext(props: Props) {
   // We need the error boundary to be on the outside of App
   // so that it can catch any errors caused by App
   return (
-    <ErrorBoundary>
+    <ErrorBoundary win={props.window || window}>
       {(setCallbacks) => (
         <App
           nonce={props.nonce}
@@ -48,7 +48,7 @@ export default function DragDropContext(props: Props) {
           dragHandleUsageInstructions={dragHandleUsageInstructions}
           enableDefaultSensors={props.enableDefaultSensors}
           sensors={props.sensors}
-          window={props.window || window}
+          win={props.window || window}
           onBeforeCapture={props.onBeforeCapture}
           onBeforeDragStart={props.onBeforeDragStart}
           onDragStart={props.onDragStart}

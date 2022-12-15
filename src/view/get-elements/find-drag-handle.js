@@ -8,10 +8,12 @@ import isHtmlElement from '../is-type-of-element/is-html-element';
 export default function findDragHandle(
   contextId: ContextId,
   draggableId: DraggableId,
+  win: WindowProxy,
 ): ?HTMLElement {
   // cannot create a selector with the draggable id as it might not be a valid attribute selector
   const selector: string = `[${dragHandleAttr.contextId}="${contextId}"]`;
-  const possible: Element[] = toArray(document.querySelectorAll(selector));
+  const doc: Document = win.document;
+  const possible: Element[] = toArray(doc.querySelectorAll(selector));
 
   if (!possible.length) {
     warning(`Unable to find any drag handles in the context "${contextId}"`);

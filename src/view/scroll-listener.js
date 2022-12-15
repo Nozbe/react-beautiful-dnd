@@ -11,6 +11,7 @@ type OnWindowScroll = (newScroll: Position) => void;
 
 type Args = {|
   onWindowScroll: OnWindowScroll,
+  win: WindowProxy,
 |};
 
 type Result = {|
@@ -19,7 +20,10 @@ type Result = {|
   isActive: () => boolean,
 |};
 
-function getWindowScrollBinding(update: () => void): EventBinding {
+function getWindowScrollBinding(
+  update: () => void,
+  win: WindowProxy,
+): EventBinding {
   return {
     eventName: 'scroll',
     // ## Passive: true
@@ -34,7 +38,7 @@ function getWindowScrollBinding(update: () => void): EventBinding {
       // All scrollable events still bubble up and are caught by this handler in ie11.
       // On a window scroll the event.target should be the window or the document.
       // If this is not the case then it is not a 'window' scroll event and can be ignored
-      if (event.target !== window && event.target !== window.document) {
+      if (event.target !== win && event.target !== win.document) {
         return;
       }
 
@@ -43,14 +47,17 @@ function getWindowScrollBinding(update: () => void): EventBinding {
   };
 }
 
-export default function getScrollListener({ onWindowScroll }: Args): Result {
+export default function getScrollListener({
+  onWindowScroll,
+  win,
+}: Args): Result {
   function updateScroll() {
     // letting the update function read the latest scroll when called
-    onWindowScroll(getWindowScroll());
+    onWindowScroll(getWindowScroll(win));
   }
 
   const scheduled = rafSchd(updateScroll);
-  const binding: EventBinding = getWindowScrollBinding(scheduled);
+  const binding: EventBinding = getWindowScrollBinding(scheduled, win);
   let unbind: () => void = noop;
 
   function isActive(): boolean {
@@ -59,7 +66,7 @@ export default function getScrollListener({ onWindowScroll }: Args): Result {
 
   function start() {
     invariant(!isActive(), 'Cannot start scroll listener when already active');
-    unbind = bindEvents(window, [binding]);
+    unbind = bindEvents(win, [binding]);
   }
   function stop() {
     invariant(isActive(), 'Cannot stop scroll listener when not active');
