@@ -18,7 +18,7 @@ import { getPreset, makeScrollable } from '../../../../../util/dimension';
 import getLiftEffect from '../../../../../../src/state/get-lift-effect';
 import { getForcedDisplacement } from '../../../../../util/impact';
 
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 [vertical, horizontal].forEach((axis: Axis) => {
   describe(`on ${axis.direction} axis`, () => {

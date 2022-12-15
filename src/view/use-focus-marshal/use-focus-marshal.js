@@ -25,8 +25,6 @@ export default function useFocusMarshal(
   const restoreFocusFrameRef = useRef<?AnimationFrameID>(null);
   const isMountedRef = useRef<boolean>(false);
 
-  const doc: Document = win.document;
-
   const register = useCallback(function register(
     id: DraggableId,
     focus: () => void,
@@ -53,11 +51,11 @@ export default function useFocusMarshal(
         win,
       );
 
-      if (handle && handle !== doc.activeElement) {
+      if (handle && handle !== win.document.activeElement) {
         handle.focus();
       }
     },
-    [contextId, doc, win],
+    [contextId, win],
   );
 
   const tryShiftRecord = useCallback(function tryShiftRecord(
@@ -99,6 +97,7 @@ export default function useFocusMarshal(
       // clear any existing record
       recordRef.current = null;
 
+      const doc: Document = win.document;
       const focused: ?Element = doc.activeElement;
 
       // no item focused so it cannot be our item
@@ -113,7 +112,7 @@ export default function useFocusMarshal(
 
       recordRef.current = id;
     },
-    [doc],
+    [win],
   );
 
   useLayoutEffect(() => {

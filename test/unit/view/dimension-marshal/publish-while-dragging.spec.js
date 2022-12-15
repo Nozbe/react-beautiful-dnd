@@ -131,6 +131,7 @@ describe('draggable additions', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -163,6 +164,7 @@ describe('draggable additions', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -201,6 +203,7 @@ describe('draggable additions', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -235,6 +238,7 @@ describe('draggable additions', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     const notVirtual: DroppableDimension = {
       ...scrollableHome,
@@ -283,6 +287,7 @@ describe('draggable removals', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -324,6 +329,7 @@ describe('draggable removals', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     const dimensions: DimensionMap = {
       draggables: {
@@ -353,6 +359,7 @@ describe('draggable removals', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -373,6 +380,7 @@ describe('droppables', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -393,6 +401,7 @@ describe('droppables', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, withScrollables);
 
@@ -421,6 +430,7 @@ describe('droppables', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     const watcher: DimensionWatcher = populate(registry, withScrollables);
 
@@ -459,6 +469,7 @@ describe('droppables', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     const watcher: DimensionWatcher = populate(registry, withScrollables);
 
@@ -499,6 +510,7 @@ describe('cancelling mid publish', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
 
     populate(registry, justCritical);
@@ -536,6 +548,7 @@ describe('subsequent', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, justCritical);
 
@@ -562,6 +575,7 @@ describe('subsequent', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       callbacks,
+      window,
     );
     populate(registry, justCritical);
 

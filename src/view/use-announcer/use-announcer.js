@@ -16,10 +16,9 @@ export default function useAnnouncer(
   const id: string = useMemo(() => getId(contextId), [contextId]);
   const ref = useRef<?HTMLElement>(null);
 
-  const doc: Document = win.document;
-
   useEffect(
     function setup() {
+      const doc: Document = win.document;
       const el: HTMLElement = doc.createElement('div');
       // storing reference for usage in announce
       ref.current = el;
@@ -59,7 +58,7 @@ export default function useAnnouncer(
         });
       };
     },
-    [id, doc],
+    [id, win],
   );
 
   const announce: Announce = useCallback((message: string): void => {

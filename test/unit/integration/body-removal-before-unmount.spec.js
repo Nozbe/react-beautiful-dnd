@@ -11,7 +11,7 @@ it('should have any errors when body is changed just before unmount', () => {
   const { unmount } = render(<App />);
 
   expect(() => {
-    getBodyElement().innerHTML = '';
+    getBodyElement(document).innerHTML = '';
     unmount();
     jest.runOnlyPendingTimers();
   }).not.toThrow();
@@ -29,7 +29,7 @@ forEachSensor((control: Control) => {
     expect(isDragging(handle)).toEqual(true);
 
     expect(() => {
-      getBodyElement().innerHTML = '';
+      getBodyElement(document).innerHTML = '';
       unmount();
       jest.runOnlyPendingTimers();
     }).not.toThrow();

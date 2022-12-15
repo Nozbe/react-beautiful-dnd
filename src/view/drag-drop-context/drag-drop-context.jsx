@@ -36,10 +36,13 @@ export default function DragDropContext(props: Props) {
   const dragHandleUsageInstructions: string =
     props.dragHandleUsageInstructions || preset.dragHandleUsageInstructions;
 
+  // server-side rendering
+  const defaultWindow = typeof window !== 'undefined' ? window : undefined;
+
   // We need the error boundary to be on the outside of App
   // so that it can catch any errors caused by App
   return (
-    <ErrorBoundary win={props.window || window}>
+    <ErrorBoundary win={props.window || defaultWindow}>
       {(setCallbacks) => (
         <App
           nonce={props.nonce}
@@ -48,7 +51,7 @@ export default function DragDropContext(props: Props) {
           dragHandleUsageInstructions={dragHandleUsageInstructions}
           enableDefaultSensors={props.enableDefaultSensors}
           sensors={props.sensors}
-          win={props.window || window}
+          win={props.window || defaultWindow}
           onBeforeCapture={props.onBeforeCapture}
           onBeforeDragStart={props.onBeforeDragStart}
           onDragStart={props.onDragStart}

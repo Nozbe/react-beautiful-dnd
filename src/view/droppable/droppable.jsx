@@ -50,8 +50,6 @@ export default function Droppable(props: Props) {
     getContainerForClone,
   } = props;
 
-  const doc: Document = win.document;
-
   const getDroppableRef = useCallback(
     (): ?HTMLElement => droppableRef.current,
     [],
@@ -76,9 +74,9 @@ export default function Droppable(props: Props) {
   const onPlaceholderTransitionEnd = useCallback(() => {
     // A placeholder change can impact the window's max scroll
     if (isMovementAllowed()) {
-      updateViewportMaxScroll({ maxScroll: getMaxWindowScroll(doc) });
+      updateViewportMaxScroll({ maxScroll: getMaxWindowScroll(win.document) });
     }
-  }, [isMovementAllowed, updateViewportMaxScroll, doc]);
+  }, [isMovementAllowed, updateViewportMaxScroll, win]);
 
   useDroppablePublisher({
     droppableId,

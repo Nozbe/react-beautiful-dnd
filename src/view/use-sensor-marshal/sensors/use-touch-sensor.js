@@ -246,7 +246,9 @@ function getHandleBindings({
 export default function useTouchSensor(api: SensorAPI) {
   const phaseRef = useRef<Phase>(idle);
   const unbindEventsRef = useRef<() => void>(noop);
-  const win = api.window || window;
+
+  const defaultWindow = typeof window !== 'undefined' ? window : (null: any); // SSR placeholder
+  const win = api.window || defaultWindow;
 
   const getPhase = useCallback(function getPhase(): Phase {
     return phaseRef.current;

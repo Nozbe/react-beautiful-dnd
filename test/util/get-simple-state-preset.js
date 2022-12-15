@@ -135,7 +135,7 @@ export default (axis?: Axis = vertical) => {
 
   const scrollJumpRequest = (
     request: Position,
-    viewport?: Viewport = getViewport(),
+    viewport?: Viewport = getViewport(window),
   ): DraggingState => {
     const state: DraggingState = dragging(undefined, undefined, viewport);
 

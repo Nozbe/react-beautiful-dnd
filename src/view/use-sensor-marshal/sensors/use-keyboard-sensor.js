@@ -140,7 +140,9 @@ function getDraggingBindings(
 
 export default function useKeyboardSensor(api: SensorAPI) {
   const unbindEventsRef = useRef<() => void>(noop);
-  const win = api.window || window;
+
+  const defaultWindow = typeof window !== 'undefined' ? window : (null: any); // SSR placeholder
+  const win = api.window || defaultWindow;
 
   const startCaptureBinding: EventBinding = useMemo(
     () => ({

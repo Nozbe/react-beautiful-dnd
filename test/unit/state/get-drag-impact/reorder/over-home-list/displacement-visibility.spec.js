@@ -24,7 +24,7 @@ import { getForcedDisplacement } from '../../../../../util/impact';
 import noAfterCritical from '../../../../../util/no-after-critical';
 import { origin, subtract } from '../../../../../../src/state/position';
 
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 // this is just an application of get-displacement.spec
 

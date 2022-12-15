@@ -19,7 +19,11 @@ type Props = {|
 |};
 
 function WithMarshal(props: Props) {
-  const marshal: StyleMarshal = useStyleMarshal(props.contextId, props.nonce);
+  const marshal: StyleMarshal = useStyleMarshal(
+    props.contextId,
+    props.nonce,
+    window,
+  );
   return props.children(marshal);
 }
 

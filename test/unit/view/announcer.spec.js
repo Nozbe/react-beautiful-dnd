@@ -14,7 +14,7 @@ type Props = {|
 |};
 
 function WithAnnouncer(props: Props) {
-  const announce: Announce = useAnnouncer(props.contextId);
+  const announce: Announce = useAnnouncer(props.contextId, window);
   return props.children(announce);
 }
 

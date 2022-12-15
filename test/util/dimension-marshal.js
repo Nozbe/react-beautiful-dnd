@@ -29,7 +29,7 @@ export const createMarshal = (
     dispatch,
   );
 
-  return create(registry, callbacks);
+  return create(registry, callbacks, window);
 };
 
 export const getMarshalStub = (): DimensionMarshal => ({

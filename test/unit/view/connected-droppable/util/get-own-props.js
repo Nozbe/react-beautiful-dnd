@@ -11,7 +11,7 @@ export default (dimension: DroppableDimension): OwnProps => ({
   direction: dimension.axis.direction,
   ignoreContainerClipping: false,
   children: () => null,
-  getContainerForClone: getBodyElement,
+  getContainerForClone: () => getBodyElement(document),
   mode: 'standard',
   renderClone: null,
 });

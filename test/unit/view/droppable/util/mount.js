@@ -42,7 +42,7 @@ function App(props: AppProps) {
   const { WrappedComponent, isMovementAllowed, ...rest } = props;
   const contextId = '1';
 
-  const focus = useFocusMarshal(contextId);
+  const focus = useFocusMarshal(contextId, window);
   const context: AppContextValue = useMemo(
     () => ({
       focus,
@@ -52,6 +52,7 @@ function App(props: AppProps) {
       dragHandleUsageInstructionsId: 'fake-id',
       marshal: getMarshalStub(),
       registry: createRegistry(),
+      window,
     }),
     [focus, isMovementAllowed],
   );

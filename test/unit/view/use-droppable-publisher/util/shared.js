@@ -97,6 +97,7 @@ export function WithAppContext(props: WithAppContextProps) {
       dragHandleUsageInstructionsId: '1',
       marshal: props.marshal || getMarshalStub(),
       registry: props.registry,
+      window,
     }),
     [props.marshal, props.registry],
   );

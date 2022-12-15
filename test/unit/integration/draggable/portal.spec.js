@@ -12,10 +12,10 @@ import { isDragging } from '../util/helpers';
 import { simpleLift, mouse } from '../util/controls';
 
 const portal: HTMLElement = document.createElement('div');
-getBodyElement().appendChild(portal);
+getBodyElement(document).appendChild(portal);
 
 afterAll(() => {
-  getBodyElement().removeChild(portal);
+  getBodyElement(document).removeChild(portal);
 });
 
 const renderItem = (item: Item) => (

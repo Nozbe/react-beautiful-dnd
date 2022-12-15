@@ -17,7 +17,7 @@ import {
 import getLiftEffect from '../../../../../src/state/get-lift-effect';
 
 const preset = getPreset();
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 // The functionality of move-cross-axis is covered by other files in this folder.
 // This spec file is directed any any logic in move-cross-axis/index.js

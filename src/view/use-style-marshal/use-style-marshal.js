@@ -33,8 +33,6 @@ export default function useStyleMarshal(
   const alwaysRef = useRef<?HTMLStyleElement>(null);
   const dynamicRef = useRef<?HTMLStyleElement>(null);
 
-  const doc: Document = win.document;
-
   const setDynamicStyle = useCallback(
     // Using memoizeOne to prevent frequent updates to textContext
     memoizeOne((proposed: string) => {
@@ -53,6 +51,7 @@ export default function useStyleMarshal(
 
   // using layout effect as programatic dragging might start straight away (such as for cypress)
   useLayoutEffect(() => {
+    const doc: Document = win.document;
     invariant(
       !alwaysRef.current && !dynamicRef.current,
       'style elements already mounted',
@@ -95,7 +94,7 @@ export default function useStyleMarshal(
     styles.always,
     styles.resting,
     contextId,
-    doc,
+    win,
   ]);
 
   const dragging = useCallback(() => setDynamicStyle(styles.dragging), [

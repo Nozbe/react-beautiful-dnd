@@ -31,10 +31,9 @@ export default function useHiddenTextElement({
     contextId,
   ]);
 
-  const doc: Document = win.document;
-
   useEffect(
     function mount() {
+      const doc: Document = win.document;
       const el: HTMLElement = doc.createElement('div');
 
       // identifier
@@ -57,7 +56,7 @@ export default function useHiddenTextElement({
         }
       };
     },
-    [id, text, doc],
+    [id, text, win],
   );
 
   return id;

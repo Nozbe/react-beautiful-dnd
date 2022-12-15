@@ -19,7 +19,7 @@ import { horizontal, vertical } from '../../../../../../src/state/axis';
 import getViewport from '../../../../../../src/view/window/get-viewport';
 import { noAfterCritical } from '../../../../../../src/state/no-impact';
 
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 [vertical, horizontal].forEach((axis: Axis) => {
   describe(`on the ${axis.direction} axis`, () => {
