@@ -21,6 +21,8 @@ type Props = {|
   // See our [sensor api](/docs/sensors/sensor-api.md)
   sensors?: Sensor[],
   enableDefaultSensors?: ?boolean,
+  // Window to which the drag and drop context is bound (defaults to global window)
+  window?: WindowProxy,
 |};
 
 // Reset any context that gets persisted across server side renders
@@ -46,6 +48,7 @@ export default function DragDropContext(props: Props) {
           dragHandleUsageInstructions={dragHandleUsageInstructions}
           enableDefaultSensors={props.enableDefaultSensors}
           sensors={props.sensors}
+          window={props.window || window}
           onBeforeCapture={props.onBeforeCapture}
           onBeforeDragStart={props.onBeforeDragStart}
           onDragStart={props.onDragStart}

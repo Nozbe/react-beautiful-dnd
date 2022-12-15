@@ -63,6 +63,9 @@ export type Props = {|
 
   // screen reader
   dragHandleUsageInstructions: string,
+
+  // window
+  window: WindowProxy,
 |};
 
 const createResponders = (props: Props): Responders => ({
@@ -89,6 +92,7 @@ export default function App(props: Props) {
     sensors,
     nonce,
     dragHandleUsageInstructions,
+    window: win,
   } = props;
   const lazyStoreRef: LazyStoreRef = useRef<?Store>(null);
 
@@ -222,6 +226,7 @@ export default function App(props: Props) {
     () => ({
       marshal: dimensionMarshal,
       focus: focusMarshal,
+      window: win,
       contextId,
       canLift: getCanLift,
       isMovementAllowed: getIsMovementAllowed,
@@ -230,6 +235,7 @@ export default function App(props: Props) {
     }),
     [
       contextId,
+      win,
       dimensionMarshal,
       dragHandleUsageInstructionsId,
       focusMarshal,
