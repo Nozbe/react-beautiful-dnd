@@ -24,6 +24,7 @@
   },
   "main": "dist/react-beautiful-dnd.cjs.js",
   "module": "dist/react-beautiful-dnd.esm.js",
+  "_dev_module": "src/index.js",
   "sideEffects": false,
   "files": [
     "/dist",
