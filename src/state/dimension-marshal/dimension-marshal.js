@@ -63,7 +63,7 @@ function shouldPublishUpdate(
   return true;
 }
 
-export default (registry: Registry, callbacks: Callbacks) => {
+export default (registry: Registry, callbacks: Callbacks, win: WindowProxy) => {
   let collection: ?Collection = null;
 
   const publisher: WhileDraggingPublisher = createPublisher({
@@ -199,6 +199,7 @@ export default (registry: Registry, callbacks: Callbacks) => {
       critical,
       registry,
       scrollOptions: request.scrollOptions,
+      win,
     });
   };
 

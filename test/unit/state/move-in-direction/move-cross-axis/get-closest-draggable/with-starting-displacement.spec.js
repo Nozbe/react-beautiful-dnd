@@ -21,7 +21,7 @@ import {
 } from '../../../../../util/dimension';
 import { noAfterCritical } from '../../../../../../src/state/no-impact';
 
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 // Not covering all cases. Full coverage in without-starting-displacement.spec
 [vertical, horizontal].forEach((axis: Axis) => {

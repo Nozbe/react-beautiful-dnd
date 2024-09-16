@@ -9,14 +9,14 @@ import getStyles, { type Styles } from './get-styles';
 import { prefix } from '../data-attributes';
 import useLayoutEffect from '../use-isomorphic-layout-effect';
 
-const getHead = (): HTMLHeadElement => {
-  const head: ?HTMLHeadElement = document.querySelector('head');
+const getHead = (doc: Document): HTMLHeadElement => {
+  const head: ?HTMLHeadElement = doc.querySelector('head');
   invariant(head, 'Cannot find the head to append a style to');
   return head;
 };
 
-const createStyleEl = (nonce?: string): HTMLStyleElement => {
-  const el: HTMLStyleElement = document.createElement('style');
+const createStyleEl = (nonce?: string, doc: Document): HTMLStyleElement => {
+  const el: HTMLStyleElement = doc.createElement('style');
   if (nonce) {
     el.setAttribute('nonce', nonce);
   }
@@ -24,7 +24,11 @@ const createStyleEl = (nonce?: string): HTMLStyleElement => {
   return el;
 };
 
-export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
+export default function useStyleMarshal(
+  contextId: ContextId,
+  nonce?: string,
+  win: WindowProxy,
+) {
   const styles: Styles = useMemo(() => getStyles(contextId), [contextId]);
   const alwaysRef = useRef<?HTMLStyleElement>(null);
   const dynamicRef = useRef<?HTMLStyleElement>(null);
@@ -47,13 +51,14 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
 
   // using layout effect as programatic dragging might start straight away (such as for cypress)
   useLayoutEffect(() => {
+    const doc: Document = win.document;
     invariant(
       !alwaysRef.current && !dynamicRef.current,
       'style elements already mounted',
     );
 
-    const always: HTMLStyleElement = createStyleEl(nonce);
-    const dynamic: HTMLStyleElement = createStyleEl(nonce);
+    const always: HTMLStyleElement = createStyleEl(nonce, doc);
+    const dynamic: HTMLStyleElement = createStyleEl(nonce, doc);
 
     // store their refs
     alwaysRef.current = always;
@@ -64,8 +69,8 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
     dynamic.setAttribute(`${prefix}-dynamic`, contextId);
 
     // add style tags to head
-    getHead().appendChild(always);
-    getHead().appendChild(dynamic);
+    getHead(doc).appendChild(always);
+    getHead(doc).appendChild(dynamic);
 
     // set initial style
     setAlwaysStyle(styles.always);
@@ -75,7 +80,7 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
       const remove = (ref) => {
         const current: ?HTMLStyleElement = ref.current;
         invariant(current, 'Cannot unmount ref as it is not set');
-        getHead().removeChild(current);
+        getHead(doc).removeChild(current);
         ref.current = null;
       };
 
@@ -89,6 +94,7 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
     styles.always,
     styles.resting,
     contextId,
+    win,
   ]);
 
   const dragging = useCallback(() => setDynamicStyle(styles.dragging), [

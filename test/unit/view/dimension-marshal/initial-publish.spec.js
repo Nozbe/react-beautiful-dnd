@@ -69,6 +69,7 @@ it('should publish the registered dimensions (simple)', () => {
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
 
   registry.draggable.register(getDraggableEntry({ dimension: preset.inHome1 }));
@@ -98,6 +99,7 @@ it('should publish the registered dimensions (preset)', () => {
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
   populate(registry);
 
@@ -116,6 +118,7 @@ it('should not publish dimensions that do not have the same type as the critical
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
   populate(registry, withNewType);
 
@@ -136,6 +139,7 @@ it('should not publish dimensions that have been unregistered', () => {
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
   populate(registry, preset.dimensions);
   const expectedMap: DimensionMap = copy(preset.dimensions);
@@ -179,6 +183,7 @@ it('should publish draggables that have been updated (index change)', () => {
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
   populate(registry, preset.dimensions);
 
@@ -213,6 +218,7 @@ it('should publish droppables that have been updated (id change)', () => {
   const marshal: DimensionMarshal = createDimensionMarshal(
     registry,
     getCallbacksStub(),
+    window,
   );
   populate(registry, preset.dimensions);
   const expected: DimensionMap = copy(preset.dimensions);
@@ -278,6 +284,7 @@ describe('subsequent calls', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       getCallbacksStub(),
+      window,
     );
     populate(registry, preset.dimensions);
     const expected: StartPublishingResult = {
@@ -299,6 +306,7 @@ describe('subsequent calls', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       getCallbacksStub(),
+      window,
     );
     populate(registry, preset.dimensions);
 
@@ -311,6 +319,7 @@ describe('subsequent calls', () => {
     const marshal: DimensionMarshal = createDimensionMarshal(
       registry,
       getCallbacksStub(),
+      window,
     );
     populate(registry, preset.dimensions);
 

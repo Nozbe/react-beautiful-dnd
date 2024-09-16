@@ -20,7 +20,7 @@ it('should update when a placeholder animation finishes', () => {
   wrapper.find(Placeholder).props().onTransitionEnd();
 
   expect(dispatchProps.updateViewportMaxScroll).toHaveBeenCalledWith({
-    maxScroll: getMaxWindowScroll(),
+    maxScroll: getMaxWindowScroll(document),
   });
 });
 
@@ -38,7 +38,7 @@ it('should update when a placeholder finishes and the list is not dragged over',
   wrapper.find(Placeholder).props().onTransitionEnd();
 
   expect(dispatchProps.updateViewportMaxScroll).toHaveBeenCalledWith({
-    maxScroll: getMaxWindowScroll(),
+    maxScroll: getMaxWindowScroll(document),
   });
 });
 

@@ -227,9 +227,10 @@ const mapDispatchToProps: DispatchProps = {
   updateViewportMaxScroll: updateViewportMaxScrollAction,
 };
 
-function getBody(): HTMLElement {
-  invariant(document.body, 'document.body is not ready');
-  return document.body;
+function getBody(win: WindowProxy): HTMLElement {
+  const doc: Document = win.document;
+  invariant(doc.body, 'document.body is not ready');
+  return doc.body;
 }
 
 const defaultProps = ({

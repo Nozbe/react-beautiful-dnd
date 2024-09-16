@@ -21,6 +21,8 @@ type Props = {|
   // See our [sensor api](/docs/sensors/sensor-api.md)
   sensors?: Sensor[],
   enableDefaultSensors?: ?boolean,
+  // Window to which the drag and drop context is bound (defaults to global window)
+  window?: WindowProxy,
 |};
 
 // Reset any context that gets persisted across server side renders
@@ -34,10 +36,13 @@ export default function DragDropContext(props: Props) {
   const dragHandleUsageInstructions: string =
     props.dragHandleUsageInstructions || preset.dragHandleUsageInstructions;
 
+  // server-side rendering
+  const defaultWindow = typeof window !== 'undefined' ? window : undefined;
+
   // We need the error boundary to be on the outside of App
   // so that it can catch any errors caused by App
   return (
-    <ErrorBoundary>
+    <ErrorBoundary win={props.window || defaultWindow}>
       {(setCallbacks) => (
         <App
           nonce={props.nonce}
@@ -46,6 +51,7 @@ export default function DragDropContext(props: Props) {
           dragHandleUsageInstructions={dragHandleUsageInstructions}
           enableDefaultSensors={props.enableDefaultSensors}
           sensors={props.sensors}
+          win={props.window || defaultWindow}
           onBeforeCapture={props.onBeforeCapture}
           onBeforeDragStart={props.onBeforeDragStart}
           onDragStart={props.onDragStart}

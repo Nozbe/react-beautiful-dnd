@@ -1,8 +1,5 @@
 // @flow
 
-const isElementFixed = (el: Element): boolean =>
-  window.getComputedStyle(el).position === 'fixed';
-
 const find = (el: ?Element): boolean => {
   // cannot do anything else!
   if (el == null) {
@@ -10,7 +7,9 @@ const find = (el: ?Element): boolean => {
   }
 
   // keep looking
-  if (!isElementFixed(el)) {
+  const win = el.ownerDocument.defaultView;
+  const isFixed = win.getComputedStyle(el).position === 'fixed';
+  if (!isFixed) {
     return find(el.parentElement);
   }
 

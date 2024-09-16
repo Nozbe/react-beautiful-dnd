@@ -18,7 +18,7 @@ export const homeOwnProps: OwnProps = {
   direction: preset.home.axis.direction,
   ignoreContainerClipping: false,
   children: () => null,
-  getContainerForClone: getBodyElement,
+  getContainerForClone: () => getBodyElement(document),
   renderClone: null,
 };
 

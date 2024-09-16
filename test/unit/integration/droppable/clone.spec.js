@@ -44,7 +44,7 @@ it('should no longer render the original draggable while dragging', () => {
 });
 
 it('should render a dragging item into the container', () => {
-  const body = getBodyElement();
+  const body = getBodyElement(document);
   // default location is the body
   {
     const { unmount, getByTestId } = render(<App useClone />);

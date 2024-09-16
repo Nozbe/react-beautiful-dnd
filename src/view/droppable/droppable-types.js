@@ -66,7 +66,7 @@ export type DefaultProps = {|
   direction: Direction,
   renderClone: ?DraggableChildrenFn,
   ignoreContainerClipping: boolean,
-  getContainerForClone: () => HTMLElement,
+  getContainerForClone: (window?: typeof window) => HTMLElement,
 |};
 
 export type DispatchProps = {|

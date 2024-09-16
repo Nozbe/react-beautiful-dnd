@@ -247,6 +247,9 @@ export default function useTouchSensor(api: SensorAPI) {
   const phaseRef = useRef<Phase>(idle);
   const unbindEventsRef = useRef<() => void>(noop);
 
+  const defaultWindow = typeof window !== 'undefined' ? window : (null: any); // SSR placeholder
+  const win = api.window || defaultWindow;
+
   const getPhase = useCallback(function getPhase(): Phase {
     return phaseRef.current;
   }, []);
@@ -312,13 +315,9 @@ export default function useTouchSensor(api: SensorAPI) {
         passive: false,
       };
 
-      unbindEventsRef.current = bindEvents(
-        window,
-        [startCaptureBinding],
-        options,
-      );
+      unbindEventsRef.current = bindEvents(win, [startCaptureBinding], options);
     },
-    [startCaptureBinding],
+    [startCaptureBinding, win],
   );
 
   const stop = useCallback(() => {
@@ -366,15 +365,15 @@ export default function useTouchSensor(api: SensorAPI) {
       // Old behaviour:
       // https://gist.github.com/parris/dda613e3ae78f14eb2dc9fa0f4bfce3d
       // https://stackoverflow.com/questions/33298828/touch-move-event-dont-fire-after-touch-start-target-is-removed
-      const unbindTarget = bindEvents(window, getHandleBindings(args), options);
-      const unbindWindow = bindEvents(window, getWindowBindings(args), options);
+      const unbindTarget = bindEvents(win, getHandleBindings(args), options);
+      const unbindWindow = bindEvents(win, getWindowBindings(args), options);
 
       unbindEventsRef.current = function unbindAll() {
         unbindTarget();
         unbindWindow();
       };
     },
-    [cancel, getPhase, stop],
+    [cancel, getPhase, stop, win],
   );
 
   const startDragging = useCallback(
@@ -444,18 +443,21 @@ export default function useTouchSensor(api: SensorAPI) {
   // This forces event.preventDefault() in dynamically added
   // touchmove event handlers to actually work
   // https://github.com/atlassian/react-beautiful-dnd/issues/1374
-  useLayoutEffect(function webkitHack() {
-    const unbind = bindEvents(window, [
-      {
-        eventName: 'touchmove',
-        // using a new noop function for each usage as a single `removeEventListener()`
-        // call will remove all handlers with the same reference
-        // https://codesandbox.io/s/removing-multiple-handlers-with-same-reference-fxe15
-        fn: () => {},
-        options: { capture: false, passive: false },
-      },
-    ]);
+  useLayoutEffect(
+    function webkitHack() {
+      const unbind = bindEvents(win, [
+        {
+          eventName: 'touchmove',
+          // using a new noop function for each usage as a single `removeEventListener()`
+          // call will remove all handlers with the same reference
+          // https://codesandbox.io/s/removing-multiple-handlers-with-same-reference-fxe15
+          fn: () => {},
+          options: { capture: false, passive: false },
+        },
+      ]);
 
-    return unbind;
-  }, []);
+      return unbind;
+    },
+    [win],
+  );
 }

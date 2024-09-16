@@ -13,6 +13,7 @@ export function useValidation(
   props: Props,
   contextId: ContextId,
   getRef: () => ?HTMLElement,
+  win: WindowProxy,
 ) {
   // running after every update in development
   useDevSetupWarning(() => {
@@ -46,7 +47,7 @@ export function useValidation(
     // When not enabled there is no drag handle props
     if (props.isEnabled) {
       invariant(
-        findDragHandle(contextId, id),
+        findDragHandle(contextId, id, win),
         `${prefix(id)} Unable to find drag handle`,
       );
     }

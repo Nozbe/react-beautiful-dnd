@@ -18,7 +18,8 @@ const isBoth = (overflow: Overflow, fn: (value: string) => boolean) =>
   fn(overflow.overflowX) && fn(overflow.overflowY);
 
 const isElementScrollable = (el: Element): boolean => {
-  const style: CSSStyleDeclaration = window.getComputedStyle(el);
+  const win = el.ownerDocument.defaultView;
+  const style: CSSStyleDeclaration = win.getComputedStyle(el);
   const overflow: Overflow = {
     overflowX: style.overflowX,
     overflowY: style.overflowY,
@@ -29,14 +30,14 @@ const isElementScrollable = (el: Element): boolean => {
 
 // Special case for a body element
 // Playground: https://codepen.io/alexreardon/pen/ZmyLgX?editors=1111
-const isBodyScrollable = (): boolean => {
+const isBodyScrollable = (doc): boolean => {
   // Because we always return false for now, we can skip any actual processing in production
   if (process.env.NODE_ENV === 'production') {
     return false;
   }
 
-  const body: HTMLBodyElement = getBodyElement();
-  const html: ?HTMLElement = document.documentElement;
+  const body: HTMLBodyElement = getBodyElement(doc);
+  const html: ?HTMLElement = doc.documentElement;
   invariant(html);
 
   // 1. The `body` has `overflow-[x|y]: auto | scroll`
@@ -44,7 +45,8 @@ const isBodyScrollable = (): boolean => {
     return false;
   }
 
-  const htmlStyle: CSSStyleDeclaration = window.getComputedStyle(html);
+  const win = doc.defaultView;
+  const htmlStyle: CSSStyleDeclaration = win.getComputedStyle(html);
   const htmlOverflow: Overflow = {
     overflowX: htmlStyle.overflowX,
     overflowY: htmlStyle.overflowY,
@@ -73,13 +75,15 @@ const getClosestScrollable = (el: ?Element): ?Element => {
     return null;
   }
 
+  const doc = el.ownerDocument;
+
   // not allowing us to go higher then body
-  if (el === document.body) {
-    return isBodyScrollable() ? el : null;
+  if (el === doc.body) {
+    return isBodyScrollable(doc) ? el : null;
   }
 
   // Should never get here, but just being safe
-  if (el === document.documentElement) {
+  if (el === doc.documentElement) {
     return null;
   }
 

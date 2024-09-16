@@ -17,7 +17,8 @@ export default function getDimension(
   el: HTMLElement,
   windowScroll?: Position = origin,
 ): DraggableDimension {
-  const computedStyles: CSSStyleDeclaration = window.getComputedStyle(el);
+  const win = el.ownerDocument.defaultView;
+  const computedStyles: CSSStyleDeclaration = win.getComputedStyle(el);
   const borderBox: ClientRect = el.getBoundingClientRect();
   const client: BoxModel = calculateBox(borderBox, computedStyles);
   const page: BoxModel = withScroll(client, windowScroll);

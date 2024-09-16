@@ -12,7 +12,7 @@ import type {
   DroppableDimensionMap,
 } from '../../../../../src/types';
 
-const viewport: Viewport = getViewport();
+const viewport: Viewport = getViewport(window);
 
 describe('get best cross axis droppable', () => {
   describe('on the vertical axis', () => {

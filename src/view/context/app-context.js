@@ -8,6 +8,7 @@ import type { Registry } from '../../state/registry/registry-types';
 export type AppContextValue = {|
   focus: FocusMarshal,
   contextId: ContextId,
+  window: WindowProxy,
   canLift: (id: DraggableId) => boolean,
   isMovementAllowed: () => boolean,
   dragHandleUsageInstructionsId: ElementId,

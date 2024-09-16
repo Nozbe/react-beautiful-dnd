@@ -41,7 +41,7 @@ it('should support hydrating a server side rendered application', () => {
   resetServerContext();
   const el = document.createElement('div');
   el.innerHTML = serverHTML;
-  getBodyElement().appendChild(el);
+  getBodyElement(document).appendChild(el);
 
   expect(() => ReactDOM.hydrate(<App />, el)).not.toThrow();
 });

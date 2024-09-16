@@ -17,11 +17,13 @@ export function getElementId({ contextId, uniqueId }: GetIdArgs): ElementId {
 type Args = {|
   contextId: ContextId,
   text: string,
+  win: WindowProxy,
 |};
 
 export default function useHiddenTextElement({
   contextId,
   text,
+  win,
 }: Args): ElementId {
   const uniqueId: string = useUniqueId('hidden-text', { separator: '-' });
   const id: ElementId = useMemo(() => getElementId({ contextId, uniqueId }), [
@@ -31,7 +33,8 @@ export default function useHiddenTextElement({
 
   useEffect(
     function mount() {
-      const el: HTMLElement = document.createElement('div');
+      const doc: Document = win.document;
+      const el: HTMLElement = doc.createElement('div');
 
       // identifier
       el.id = id;
@@ -43,17 +46,17 @@ export default function useHiddenTextElement({
       el.style.display = 'none';
 
       // Add to body
-      getBodyElement().appendChild(el);
+      getBodyElement(doc).appendChild(el);
 
       return function unmount() {
         // checking if element exists as the body might have been changed by things like 'turbolinks'
-        const body: HTMLBodyElement = getBodyElement();
+        const body: HTMLBodyElement = getBodyElement(doc);
         if (body.contains(el)) {
           body.removeChild(el);
         }
       };
     },
-    [id, text],
+    [id, text, win],
   );
 
   return id;

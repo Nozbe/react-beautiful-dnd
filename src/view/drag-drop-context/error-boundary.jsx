@@ -8,6 +8,7 @@ import type { AppCallbacks } from './drag-drop-context-types';
 
 type Props = {|
   children: (setCallbacks: (callbacks: AppCallbacks) => void) => Node,
+  win: WindowProxy,
 |};
 
 // Lame that this is not in flow
@@ -20,7 +21,7 @@ export default class ErrorBoundary extends React.Component<Props> {
   unbind: () => void = noop;
 
   componentDidMount() {
-    this.unbind = bindEvents(window, [
+    this.unbind = bindEvents(this.props.win, [
       {
         eventName: 'error',
         fn: this.onWindowError,
